@@ -9,11 +9,11 @@ export default function LoginPage() {
     const navigate = useNavigate()
     const [login, setLogin] = useState({ email: "", password: "" })
     const [loading, setLoading] = useState(false)
-    console.log(login)
-    console.log(loading)
+    const [disabled, setDisabled] = useState(false)
 
     function fazerLogin(e) {
         e.preventDefault();
+        setDisabled(true)
         setLoading(true)
         const url = "https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/auth/login";
         const promise = axios.post(url, login)
@@ -23,6 +23,7 @@ export default function LoginPage() {
         promise.catch((err) => {
             alert(err.response.data.message)
             setLoading(false)
+            setDisabled(false)
         })
     }
 
@@ -34,23 +35,27 @@ export default function LoginPage() {
             <DivForm>
                 <form onSubmit={fazerLogin}>
                     <input
+                        data-test="email-input" 
                         type="email"
                         placeholder="email"
                         required
+                        disabled = {disabled}
                         value={login.email}
                         onChange={e => setLogin({ ...login, email: e.target.value })}
                     />
 
                     <input
+                        data-test="password-input"
                         type="password"
                         placeholder="senha"
                         required
+                        disabled={disabled}
                         value={login.password}
                         onChange={e => setLogin({ ...login, password: e.target.value })}
                     />
 
                     {!loading ?
-                        <button type="submit">Entrar</button>
+                        <button data-test="login-btn" type="submit">Entrar</button>
                         :
                         <BotaoLoading disabled>
                             <ThreeDots
@@ -68,7 +73,7 @@ export default function LoginPage() {
 
                 </form>
             </DivForm>
-            <Link to="/cadastro">Não tem uma conta? Cadastre-se!</Link>
+            <Link data-test="signup-link" to="/cadastro">Não tem uma conta? Cadastre-se!</Link>
         </TelaLogin>
     )
 }
@@ -105,12 +110,15 @@ input{
     border-radius: 5px;
     border: 1px solid #D4D4D4;
     box-sizing: border-box;
+    font-family: 'Lexend Deca', sans-serif;
+    color: #AFAFAF;
+    font-size: 20px;
+    padding-left: 11px;
 ::placeholder {
     font-family: 'Lexend Deca', sans-serif;
     color: #DBDBDB;
     font-size: 20px;
     line-height: 25px;
-    padding-left: 11px;
 }
 :focus{
     border: 1px solid #D4D4D4;

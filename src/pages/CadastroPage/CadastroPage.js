@@ -9,11 +9,13 @@ export default function CadastroPage() {
     const navigate = useNavigate()
     const [cadastro, setCadastro] = useState({email: "", name: "", image: "", password:""})
     const [loading, setLoading] = useState(false)
+    const [disabled, setDisabled] = useState(false)
     console.log(cadastro)
 
     function fazerCadastro (e) {
         e.preventDefault();
         setLoading(true)
+        setDisabled(true)
         const url = "https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/auth/sign-up";
         const promise = axios.post(url, cadastro)
         promise.then(() => {
@@ -22,6 +24,7 @@ export default function CadastroPage() {
         promise.catch((err) => {
             alert(err.response.data.message)
             setLoading(false)
+            setDisabled(false)
         })
     }
     
@@ -31,39 +34,47 @@ export default function CadastroPage() {
             <DivForm>
                 <form onSubmit={fazerCadastro}>
                     <input 
+                    data-test="email-input"
                     type="email" 
                     placeholder="email"
                     required
+                    disabled={disabled}
                     value={cadastro.email}
                     onChange={e => setCadastro({...cadastro, email: e.target.value})}
                     />
 
                     <input 
+                    data-test="password-input"
                     type="password" 
                     placeholder="senha"
                     required
+                    disabled={disabled}
                     value={cadastro.password}
                     onChange={e => setCadastro({...cadastro, password: e.target.value})}
                     />
 
                     <input 
+                    data-test="user-name-input"
                     type="text" 
                     placeholder="nome"
                     required
+                    disabled={disabled}
                     value={cadastro.name}
                     onChange={e => setCadastro({...cadastro, name: e.target.value})}
                     />
 
                     <input 
+                    data-test="user-image-input"
                     type="url" 
                     placeholder="foto"
                     required
+                    disabled={disabled}
                     value={cadastro.image}
                     onChange={e => setCadastro({...cadastro, image: e.target.value})}
                     />
 
                     {!loading ?
-                        <button type="submit">Cadastrar</button>
+                        <button data-test="signup-btn"  type="submit">Cadastrar</button>
                         :
                         <BotaoLoading disabled>
                             <ThreeDots
@@ -81,7 +92,7 @@ export default function CadastroPage() {
                 </form>
             </DivForm>
 
-            <Link to="/">Já tem uma conta? Faça login!</Link>
+            <Link data-test="login-link" to="/">Já tem uma conta? Faça login!</Link>
         </TelaLogin>
     )
 }
@@ -118,21 +129,24 @@ input{
     border-radius: 5px;
     border: 1px solid #D4D4D4;
     box-sizing: border-box;
-} 
-input::placeholder {
+    font-family: 'Lexend Deca', sans-serif;
+    color: #AFAFAF;
+    font-size: 20px;
+    padding-left: 11px;
+::placeholder {
     font-family: 'Lexend Deca', sans-serif;
     color: #DBDBDB;
     font-size: 20px;
     line-height: 25px;
-    padding-left: 11px;
 }
-input:focus{
+:focus{
     border: 1px solid #D4D4D4;
     outline: 0;
     font-family: 'Lexend Deca', sans-serif;
     color: #AFAFAF;
     font-size: 20px;
     padding-left: 11px;
+}
 }
 button {
     width: 303px;
