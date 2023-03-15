@@ -1,16 +1,11 @@
 import styled from "styled-components"
-import logo from "../../assets/tracklist.svg"
-import { Link } from "react-router-dom"
-import { CircularProgressbar, buildStyles } from 'react-circular-progressbar';
-import 'react-circular-progressbar/dist/styles.css';
+import Topo from "../../components/Topo"
+import Menu from "../../components/Menu"
 
 export default function HojePage() {
     return (
         <>
-            <TopoContainer>
-                <img src={logo} />
-                <img src="https://images.alphacoders.com/120/thumb-1920-120091.jpg" />
-            </TopoContainer>
+            <Topo />
             <TelaHabitos>
                 <MeusHabitos>
                     <h1>Hoje</h1>
@@ -20,54 +15,10 @@ export default function HojePage() {
                     
                 </Habitos>
             </TelaHabitos>
-            <MenuContainer>
-                <Link to="/habitos">Hábitos</Link>
-                <Link to="/hoje">
-                    <CircularProgress>
-                        <CircularProgressbar
-                            value={66}
-                            text={"Hoje"}
-                            background
-                            backgroundPadding={6}
-                            styles={buildStyles({
-                                backgroundColor: "#52B6FF",
-                                textColor: "#fff",
-                                pathColor: "#fff",
-                                trailColor: "transparent",
-                                textSize: "18px",
-                            })}
-                        />
-                    </CircularProgress>
-                </Link>
-                <Link to="/historico">Histórico</Link>
-            </MenuContainer>
+            <Menu />
         </>
     )
 }
-
-const TopoContainer = styled.div`
-    width: 100%;
-    height: 70px;
-    background-color: #126BA5;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.15);
-    position: fixed;
-    top: 0;
-    z-index: 1;
-    img:nth-child(1){
-        width: 97px;
-        height: 49px;
-        margin-left: 18px;
-    }
-    img:nth-child(2){
-        width: 51px;
-        height: 51px;
-        border-radius: 50px;
-        margin-right: 10px;
-    }
-`
 
 const TelaHabitos = styled.div`
     height: 80vh;
@@ -101,36 +52,4 @@ const Habitos = styled.div`
         color: #666666;
         font-size: 18px;
     }
-`
-
-const MenuContainer = styled.div`
-    position: relative;
-    width: 100%;
-    height: 70px;
-    background-color: #FFFFFF;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.15);
-    position: fixed;
-    bottom: 0;
-    z-index: 1;
-    a{
-        font-family: 'Lexend Deca', sans-serif;
-        text-decoration: none;
-        color: #52B6FF;
-        margin-right: 36px;
-        margin-left: 36px;
-    } 
-`
-
-const CircularProgress = styled.div`
-    font-family: 'Lexend Deca', sans-serif;
-    position: absolute;
-    bottom: 10px;
-    left: 0;
-    right: 0;
-    margin: auto;
-    width:91px;
-    height: 91px;
 `

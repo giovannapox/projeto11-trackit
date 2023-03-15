@@ -152,5 +152,8 @@ button {
     font-size: 20.98px;
     color: #FFFFFF;
     font-family: 'Lexend Deca', sans-serif;
+    :disabled{
+        opacity: 0.7;
+    }
 }
 `

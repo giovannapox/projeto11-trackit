@@ -131,6 +131,9 @@ button {
     display: flex;
     justify-content: center;
     align-items: center;
+    :disabled{
+        opacity: 0.7;
+    }
 }
 `
 
