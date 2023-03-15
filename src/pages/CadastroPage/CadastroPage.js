@@ -7,14 +7,12 @@ import { ThreeDots } from "react-loader-spinner"
 
 export default function CadastroPage() {
     const navigate = useNavigate()
-    const [cadastro, setCadastro] = useState({email: "", name: "", image: "", password:""})
-    const [loading, setLoading] = useState(false)
+    const [cadastro, setCadastro] = useState({ email: "", name: "", image: "", password: "" })
     const [disabled, setDisabled] = useState(false)
     console.log(cadastro)
 
-    function fazerCadastro (e) {
+    function fazerCadastro(e) {
         e.preventDefault();
-        setLoading(true)
         setDisabled(true)
         const url = "https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/auth/sign-up";
         const promise = axios.post(url, cadastro)
@@ -23,72 +21,69 @@ export default function CadastroPage() {
         })
         promise.catch((err) => {
             alert(err.response.data.message)
-            setLoading(false)
             setDisabled(false)
         })
     }
-    
+
     return (
         <TelaLogin>
             <img src={logo} />
             <DivForm>
                 <form onSubmit={fazerCadastro}>
-                    <input 
-                    data-test="email-input"
-                    type="email" 
-                    placeholder="email"
-                    required
-                    disabled={disabled}
-                    value={cadastro.email}
-                    onChange={e => setCadastro({...cadastro, email: e.target.value})}
+                    <input
+                        data-test="email-input"
+                        type="email"
+                        placeholder="email"
+                        required
+                        disabled={disabled}
+                        value={cadastro.email}
+                        onChange={e => setCadastro({ ...cadastro, email: e.target.value })}
                     />
 
-                    <input 
-                    data-test="password-input"
-                    type="password" 
-                    placeholder="senha"
-                    required
-                    disabled={disabled}
-                    value={cadastro.password}
-                    onChange={e => setCadastro({...cadastro, password: e.target.value})}
+                    <input
+                        data-test="password-input"
+                        type="password"
+                        placeholder="senha"
+                        required
+                        disabled={disabled}
+                        value={cadastro.password}
+                        onChange={e => setCadastro({ ...cadastro, password: e.target.value })}
                     />
 
-                    <input 
-                    data-test="user-name-input"
-                    type="text" 
-                    placeholder="nome"
-                    required
-                    disabled={disabled}
-                    value={cadastro.name}
-                    onChange={e => setCadastro({...cadastro, name: e.target.value})}
+                    <input
+                        data-test="user-name-input"
+                        type="text"
+                        placeholder="nome"
+                        required
+                        disabled={disabled}
+                        value={cadastro.name}
+                        onChange={e => setCadastro({ ...cadastro, name: e.target.value })}
                     />
 
-                    <input 
-                    data-test="user-image-input"
-                    type="url" 
-                    placeholder="foto"
-                    required
-                    disabled={disabled}
-                    value={cadastro.image}
-                    onChange={e => setCadastro({...cadastro, image: e.target.value})}
+                    <input
+                        data-test="user-image-input"
+                        type="url"
+                        placeholder="foto"
+                        required
+                        disabled={disabled}
+                        value={cadastro.image}
+                        onChange={e => setCadastro({ ...cadastro, image: e.target.value })}
                     />
 
-                    {!loading ?
-                        <button data-test="signup-btn"  type="submit">Cadastrar</button>
-                        :
-                        <BotaoLoading disabled>
+                    <button data-test="signup-btn" type="submit" disabled={disabled}>
+                        {disabled ?
                             <ThreeDots
                                 height="50"
                                 width="50"
-                                radius="9"
                                 color="#FFFFFF"
-                                ariaLabel="three-dots-loading"
-                                wrapperStyle={{}}
-                                wrapperClassName=""
-                                visible={true}
                             />
-                        </BotaoLoading>
-                    }
+                            : "Cadastrar"
+                        }
+                    </button>
+
+
+
+
                 </form>
             </DivForm>
 
@@ -158,8 +153,4 @@ button {
     color: #FFFFFF;
     font-family: 'Lexend Deca', sans-serif;
 }
-`
-
-const BotaoLoading = styled.button`
-    opacity: 0.7;
 `

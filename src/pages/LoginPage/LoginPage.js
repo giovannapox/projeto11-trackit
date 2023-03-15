@@ -8,13 +8,11 @@ import { ThreeDots } from "react-loader-spinner"
 export default function LoginPage() {
     const navigate = useNavigate()
     const [login, setLogin] = useState({ email: "", password: "" })
-    const [loading, setLoading] = useState(false)
     const [disabled, setDisabled] = useState(false)
 
     function fazerLogin(e) {
         e.preventDefault();
         setDisabled(true)
-        setLoading(true)
         const url = "https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/auth/login";
         const promise = axios.post(url, login)
         promise.then(() => {
@@ -22,7 +20,6 @@ export default function LoginPage() {
         })
         promise.catch((err) => {
             alert(err.response.data.message)
-            setLoading(false)
             setDisabled(false)
         })
     }
@@ -35,11 +32,11 @@ export default function LoginPage() {
             <DivForm>
                 <form onSubmit={fazerLogin}>
                     <input
-                        data-test="email-input" 
+                        data-test="email-input"
                         type="email"
                         placeholder="email"
                         required
-                        disabled = {disabled}
+                        disabled={disabled}
                         value={login.email}
                         onChange={e => setLogin({ ...login, email: e.target.value })}
                     />
@@ -54,23 +51,16 @@ export default function LoginPage() {
                         onChange={e => setLogin({ ...login, password: e.target.value })}
                     />
 
-                    {!loading ?
-                        <button data-test="login-btn" type="submit">Entrar</button>
-                        :
-                        <BotaoLoading disabled>
+                    <button data-test="login-btn" type="submit" disabled={disabled}>
+                        {disabled ?
                             <ThreeDots
                                 height="50"
                                 width="50"
-                                radius="9"
                                 color="#FFFFFF"
-                                ariaLabel="three-dots-loading"
-                                wrapperStyle={{}}
-                                wrapperClassName=""
-                                visible={true}
                             />
-                        </BotaoLoading>
-                    }
-
+                            : "Entrar"
+                        }
+                    </button>
                 </form>
             </DivForm>
             <Link data-test="signup-link" to="/cadastro">Não tem uma conta? Cadastre-se!</Link>
@@ -144,6 +134,3 @@ button {
 }
 `
 
-const BotaoLoading = styled.button`
-    opacity: 0.7;
-`
