@@ -1,12 +1,11 @@
 import styled from "styled-components"
 import Topo from "../../components/Topo"
 import Menu from "../../components/Menu"
-import { dias } from "../../constants/dias"
 import { useContext, useEffect, useState } from "react"
 import BotoesSemana from "./BotoesSemana"
-import lixeira from "../../assets/lixeira.png"
 import UserContext from "../../context/UserContext"
 import axios from "axios"
+import TodosHabitos from "./TodosHabitos"
 
 export default function HabitosPage() {
     const { token } = useContext(UserContext)
@@ -15,6 +14,7 @@ export default function HabitosPage() {
     const [display, setDisplay] = useState("none")
     const [listaHabitos, setListaHabitos] = useState([])
     const [habitos, setHabitos] = useState()
+    const [disabled, setDisabled] = useState(false)
 
     console.log("lista habitos", listaHabitos)
     console.log(habito)
@@ -50,15 +50,18 @@ export default function HabitosPage() {
     }
 
     function salvarHabito(e) {
+        setDisabled(true)
         e.preventDefault();
         const promise = axios.post("https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits", habito, config)
         promise.then(res => {
             console.log(res)
             setDisplay("none")
             setHabito({name:"",days:[]})
+            setDisabled(false)
         })
         promise.catch(err => {
             alert(err.response.data.message)
+            setDisabled(false)
         } )
         setHabito({name:"",days:[]})
     }
@@ -72,23 +75,24 @@ export default function HabitosPage() {
                     <button data-test="habit-create-btn"  onClick={adicionarHabito}>+</button>
                 </MeusHabitos>
                 <Habitos>
-                    <CriarHabito display={display} data-test="habit-create-container" >
+                    <CriarHabito display={display} data-test="habit-create-container">
                         <form>
                             <input 
                             data-test="habit-name-input"  
                             placeholder="nome do hábito"
+                            disabled={disabled}
                             value={habito.name}
                             onChange={e => setHabito({...habito, name: e.target.value})}
                             ></input>
                             <DivDias>
                                 {data.map((d, i) =>
-                                    <BotoesSemana key={d.id} name={d.name} habito={habito} setHabito={setHabito} i={i} dia={d}/>
+                                    <BotoesSemana key={d.id} name={d.name} habito={habito} setHabito={setHabito} i={i} dia={d} disabled={disabled}/>
                                 )}
                             </DivDias>
 
                             <Botoes>
-                                <BotaoCancelar data-test="habit-create-cancel-btn" onClick={cancelarHabito}>Cancelar</BotaoCancelar>
-                                <BotaoSalvar data-test="habit-create-save-btn" onClick={salvarHabito}>Salvar</BotaoSalvar>
+                                <BotaoCancelar data-test="habit-create-cancel-btn" onClick={cancelarHabito} disabled={disabled}>Cancelar</BotaoCancelar>
+                                <BotaoSalvar data-test="habit-create-save-btn" onClick={salvarHabito} disabled={disabled}>Salvar</BotaoSalvar>
                             </Botoes>
                         </form>
                     </CriarHabito>
@@ -96,7 +100,7 @@ export default function HabitosPage() {
                     {(!habitos) ? 
                     <p>Você não tem nenhum hábito cadastrado ainda. Adicione um hábito para começar a trackear!</p>
                     :
-                    listaHabitos.map((h) => <Habitos data-test="habit-container" key={h.id} nome={h.name} dias={h.days} id={h.id} />)
+                    listaHabitos.map((h) => <TodosHabitos data-test="habit-container" key={h.id} nome={h.name} dias={h.days} id={h.id} />)
                     }
 
                     
@@ -108,10 +112,11 @@ export default function HabitosPage() {
 }
 
 const TelaHabitos = styled.div`
-    height: 80vh;
+    height: 100vh;
     background-color: #F2F2F2;
     font-family: 'Lexend Deca', sans-serif;
     margin-top: 70px;
+    margin-bottom: 70px;
 `
 
 const MeusHabitos = styled.div`

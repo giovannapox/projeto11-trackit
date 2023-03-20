@@ -1,7 +1,7 @@
 import styled from "styled-components"
 import { useState } from "react"
 
-export default function BotoesSemana ( {name, habito, setHabito, i, dia}) {
+export default function BotoesSemana ( {name, habito, setHabito, i, dia, disabled}) {
     const [cor, setCor] = useState(false)
 
     function selecionarDia(e){
@@ -21,7 +21,7 @@ export default function BotoesSemana ( {name, habito, setHabito, i, dia}) {
 
     return (
         <>
-            <BotaoDia data-test="habit-day" onClick={selecionarDia} cor={cor}>{dia}</BotaoDia>
+            <BotaoDia data-test="habit-day" onClick={selecionarDia} cor={cor} disabled={disabled}>{dia}</BotaoDia>
         </>
     )
 }

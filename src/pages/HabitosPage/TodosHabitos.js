@@ -2,8 +2,9 @@ import UserContext from "../../context/UserContext"
 import { useContext } from "react"
 import axios from "axios"
 import styled from "styled-components"
+import lixeira from "../../assets/lixeira.png"
 
-export default function Habitos( {nome, dias, id} ) {
+export default function TodosHabitos( {nome, dias, id} ) {
     const diasSemana = ["D", "S", "T", "Q", "Q", "S", "S"]
     const { token } = useContext(UserContext)
 
@@ -13,7 +14,13 @@ export default function Habitos( {nome, dias, id} ) {
         }
     }
     function deletarHabito() {
-        const promise = axios.delete(`https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits/${id}`, config)
+        if (window.confirm("Tem certeza que deseja remover o hábito?") == true) {
+            const promise = axios.delete(`https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits/${id}`, config)
+            promise.then((res) => {
+                alert("Hábito deletado")
+            })
+          } else {
+          }
     }
 
     return (
@@ -59,10 +66,12 @@ const DivBotao = styled.div`
 `
 
 const Button = styled.button`
+    border-radius: 5px;
+    border: 1px solid #D4D4D4;
     margin-right: 4px;
     width: 30px;
     height: 30px;
     font-size: 20px;
-    background-color: ${props => !(data.includes(i)) ? "#FFFFFF": "#CFCFCF"};
-    color: ${props => !(data.includes(i)) ? "#CFCFCF" : "#FFFFFF"};
+    background-color: ${props => !(props.dias.includes(props.i)) ? "#FFFFFF": "#CFCFCF"};
+    color: ${props => !(props.dias.includes(props.i)) ? "#CFCFCF" : "#FFFFFF"};
 `
