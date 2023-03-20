@@ -24,7 +24,7 @@ export default function TodosHabitos( {nome, dias, id} ) {
     }
 
     return (
-        <Habito>
+        <Habito data-test="habit-container" >
             <div>
                 <h1 data-test="habit-name">{nome}</h1>
                 <img data-test="habit-delete-btn" onClick={deletarHabito} src={lixeira} alt="deletar" />

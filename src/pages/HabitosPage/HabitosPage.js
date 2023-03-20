@@ -38,7 +38,7 @@ export default function HabitosPage() {
         promise.catch(err => {
             alert(err.response.data.message)
         })
-    }, [])
+    }, [listaHabitos])
 
     function adicionarHabito() {
         setDisplay("flex")
@@ -100,7 +100,7 @@ export default function HabitosPage() {
                     {(!habitos) ? 
                     <p>Você não tem nenhum hábito cadastrado ainda. Adicione um hábito para começar a trackear!</p>
                     :
-                    listaHabitos.map((h) => <TodosHabitos data-test="habit-container" key={h.id} nome={h.name} dias={h.days} id={h.id} />)
+                    listaHabitos.map((h) => <TodosHabitos key={h.id} nome={h.name} dias={h.days} id={h.id} listaHabitos={listaHabitos} />)
                     }
 
                     
@@ -112,7 +112,6 @@ export default function HabitosPage() {
 }
 
 const TelaHabitos = styled.div`
-    height: 100vh;
     background-color: #F2F2F2;
     font-family: 'Lexend Deca', sans-serif;
     margin-top: 70px;
