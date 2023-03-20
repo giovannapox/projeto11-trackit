@@ -9,7 +9,6 @@ export default function Topo() {
     return (
         <>
             <TopoContainer data-test="header">
-                {console.log(image)}
                 <img src={logo} alt="logo" />
                 <img src={image} alt="user icon"/>
             </TopoContainer>

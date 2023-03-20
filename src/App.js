@@ -9,6 +9,7 @@ import UserContext from "./context/UserContext"
 
 export default function App() {
     const [user, setUser] = useState([]);
+
   return (
       <BrowserRouter>
       <UserContext.Provider value={user}>

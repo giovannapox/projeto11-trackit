@@ -5,7 +5,7 @@ import { useContext, useState } from "react"
 import axios from "axios"
 import { ThreeDots } from "react-loader-spinner"
 
-export default function LoginPage( {setUser }) {
+export default function LoginPage(props) {
     const navigate = useNavigate()
     const [login, setLogin] = useState({ email: "", password: "" })
     const [disabled, setDisabled] = useState(false)
@@ -17,7 +17,7 @@ export default function LoginPage( {setUser }) {
         const promise = axios.post(url, login)
         promise.then((res) => {
             navigate("/hoje")
-            setUser(e.data)
+            props.setUser(res.data)
         })
         promise.catch((err) => {
             alert(err.response.data.message)
