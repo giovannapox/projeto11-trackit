@@ -2,23 +2,43 @@ import styled from "styled-components"
 import Topo from "../../components/Topo"
 import Menu from "../../components/Menu"
 import { dias } from "../../constants/dias"
-import { useEffect, useState } from "react"
+import { useContext, useEffect, useState } from "react"
 import BotoesSemana from "./BotoesSemana"
 import lixeira from "../../assets/lixeira.png"
+import UserContext from "../../context/UserContext"
+import axios from "axios"
 
 export default function HabitosPage() {
-    const dias = ["D","S","T","Q","Q","S","S"]
+    const { token } = useContext(UserContext)
+    const [habito, setHabito] = useState({name:"", days:[]})
+    const data = ["D","S","T","Q","Q","S","S"]
     const [display, setDisplay] = useState("none")
+    const [listaHabitos, setListaHabitos] = useState([])
+    const [habitos, setHabitos] = useState()
 
-    /*const config = {
+    console.log("lista habitos", listaHabitos)
+    console.log(habito)
+    const config = {
         headers: {
             "Authorization":`Bearer ${token}`
         }
-    }*/
+    }
 
-    /*useEffect(() => {
+    useEffect(() => {
         const promise = axios.get("https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits", config)
-    })*/
+        promise.then((res) => {
+            setListaHabitos(res.data)
+            if(res.data.length > 0){
+                setHabitos(true)
+            } else {
+                setHabitos(false)
+            }
+        })
+
+        promise.catch(err => {
+            alert(err.response.data.message)
+        })
+    }, [])
 
     function adicionarHabito() {
         setDisplay("flex")
@@ -31,7 +51,16 @@ export default function HabitosPage() {
 
     function salvarHabito(e) {
         e.preventDefault();
-        alert("salvarHabito")
+        const promise = axios.post("https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits", habito, config)
+        promise.then(res => {
+            console.log(res)
+            setDisplay("none")
+            setHabito({name:"",days:[]})
+        })
+        promise.catch(err => {
+            alert(err.response.data.message)
+        } )
+        setHabito({name:"",days:[]})
     }
 
     return (
@@ -45,10 +74,15 @@ export default function HabitosPage() {
                 <Habitos>
                     <CriarHabito display={display} data-test="habit-create-container" >
                         <form>
-                            <input data-test="habit-name-input"  placeholder="nome do hábito"></input>
+                            <input 
+                            data-test="habit-name-input"  
+                            placeholder="nome do hábito"
+                            value={habito.name}
+                            onChange={e => setHabito({...habito, name: e.target.value})}
+                            ></input>
                             <DivDias>
-                                {dias.map((d) =>
-                                    <BotoesSemana key={d.id} name={d.name} />
+                                {data.map((d, i) =>
+                                    <BotoesSemana key={d.id} name={d.name} habito={habito} setHabito={setHabito} i={i} dia={d}/>
                                 )}
                             </DivDias>
 
@@ -58,16 +92,14 @@ export default function HabitosPage() {
                             </Botoes>
                         </form>
                     </CriarHabito>
-                    <Habito data-test="habit-container" >
-                        <div>
-                            <h1 data-test="habit-name">Ler 1 capitulo de livro</h1>
-                            <img data-test="habit-delete-btn" src={lixeira} alt="deletar" />
-                        </div>
-                        <DivBotao>
-                        {dias.map((e,i) => <Button data-test="habit-day" i={i} disabled>{e}</Button>)}
-                        </DivBotao>
-                    </Habito>
+
+                    {(!habitos) ? 
                     <p>Você não tem nenhum hábito cadastrado ainda. Adicione um hábito para começar a trackear!</p>
+                    :
+                    listaHabitos.map((h) => <Habitos data-test="habit-container" key={h.id} nome={h.name} dias={h.days} id={h.id} />)
+                    }
+
+                    
                 </Habitos>
             </TelaHabitos>
             <Menu />
@@ -80,40 +112,6 @@ const TelaHabitos = styled.div`
     background-color: #F2F2F2;
     font-family: 'Lexend Deca', sans-serif;
     margin-top: 70px;
-`
-const Habito = styled.div`
-    width: 340px;
-    height: 91px;
-    background-color: #FFFFFF;
-    border-radius: 5px;
-    margin-top: 20px;
-    h1{
-        color: #666666;
-        font-size: 20px;
-        margin-top: 13px;
-        margin-left: 15px;
-    }
-    img{
-        width: 13px;
-        height: 15px;
-        margin-top: 11px;
-        margin-right: 11px;
-    }
-    div{
-        display: flex;
-        justify-content: space-between;
-    }
-`
-const DivBotao = styled.div`
-    width: 100px;
-    margin-left: 15px;
-    margin-top: 8px;
-`
-
-const Button = styled.button`
-    margin-right: 4px;
-    width: 30px;
-    height: 30px;
 `
 
 const MeusHabitos = styled.div`
