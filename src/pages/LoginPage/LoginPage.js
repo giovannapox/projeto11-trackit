@@ -1,22 +1,23 @@
 import styled from "styled-components"
 import logo from "../../assets/logo.svg"
 import { Link, useNavigate } from "react-router-dom"
-import { useState } from "react"
+import { useContext, useState } from "react"
 import axios from "axios"
 import { ThreeDots } from "react-loader-spinner"
 
-export default function LoginPage() {
+export default function LoginPage( {setUser }) {
     const navigate = useNavigate()
     const [login, setLogin] = useState({ email: "", password: "" })
     const [disabled, setDisabled] = useState(false)
-
+    
     function fazerLogin(e) {
         e.preventDefault();
         setDisabled(true)
         const url = "https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/auth/login";
         const promise = axios.post(url, login)
-        promise.then(() => {
+        promise.then((res) => {
             navigate("/hoje")
+            setUser(e.data)
         })
         promise.catch((err) => {
             alert(err.response.data.message)

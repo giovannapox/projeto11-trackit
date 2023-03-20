@@ -1,12 +1,17 @@
 import styled from "styled-components"
 import logo from "../assets/tracklist.svg"
+import { useContext } from "react"
+import UserContext from "../context/UserContext"
 
 export default function Topo() {
+    const { image } = useContext(UserContext)
+    
     return (
         <>
             <TopoContainer data-test="header">
-                <img src={logo} />
-                <img src="https://images.alphacoders.com/120/thumb-1920-120091.jpg" />
+                {console.log(image)}
+                <img src={logo} alt="logo" />
+                <img src={image} alt="user icon"/>
             </TopoContainer>
         </>
     )

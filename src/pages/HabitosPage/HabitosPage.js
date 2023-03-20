@@ -1,27 +1,72 @@
 import styled from "styled-components"
 import Topo from "../../components/Topo"
 import Menu from "../../components/Menu"
+import { dias } from "../../constants/dias"
+import { useEffect, useState } from "react"
+import BotoesSemana from "./BotoesSemana"
+import lixeira from "../../assets/lixeira.png"
 
 export default function HabitosPage() {
+    const dias = ["D","S","T","Q","Q","S","S"]
+    const [display, setDisplay] = useState("none")
+
+    /*const config = {
+        headers: {
+            "Authorization":`Bearer ${token}`
+        }
+    }*/
+
+    /*useEffect(() => {
+        const promise = axios.get("https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits", config)
+    })*/
+
+    function adicionarHabito() {
+        setDisplay("flex")
+    }
+
+    function cancelarHabito(e) {
+        e.preventDefault();
+        setDisplay("none")
+    }
+
+    function salvarHabito(e) {
+        e.preventDefault();
+        alert("salvarHabito")
+    }
+
     return (
         <>
             <Topo />
             <TelaHabitos>
                 <MeusHabitos>
                     <h1>Meus Hábitos</h1>
-                    <button>+</button>
+                    <button data-test="habit-create-btn"  onClick={adicionarHabito}>+</button>
                 </MeusHabitos>
                 <Habitos>
-                    <CriarHabito>
+                    <CriarHabito display={display} data-test="habit-create-container" >
                         <form>
-                            <input placeholder="nome do hábito"></input>
-                            <BotoesSemana>D</BotoesSemana>
+                            <input data-test="habit-name-input"  placeholder="nome do hábito"></input>
+                            <DivDias>
+                                {dias.map((d) =>
+                                    <BotoesSemana key={d.id} name={d.name} />
+                                )}
+                            </DivDias>
+
                             <Botoes>
-                                <BotaoCancelar>Cancelar</BotaoCancelar>
-                                <BotaoSalvar>Salvar</BotaoSalvar>
+                                <BotaoCancelar data-test="habit-create-cancel-btn" onClick={cancelarHabito}>Cancelar</BotaoCancelar>
+                                <BotaoSalvar data-test="habit-create-save-btn" onClick={salvarHabito}>Salvar</BotaoSalvar>
                             </Botoes>
                         </form>
                     </CriarHabito>
+                    <Habito data-test="habit-container" >
+                        <div>
+                            <h1 data-test="habit-name">Ler 1 capitulo de livro</h1>
+                            <img data-test="habit-delete-btn" src={lixeira} alt="deletar" />
+                        </div>
+                        <DivBotao>
+                        {dias.map((e,i) => <Button data-test="habit-day" i={i} disabled>{e}</Button>)}
+                        </DivBotao>
+                    </Habito>
                     <p>Você não tem nenhum hábito cadastrado ainda. Adicione um hábito para começar a trackear!</p>
                 </Habitos>
             </TelaHabitos>
@@ -35,6 +80,40 @@ const TelaHabitos = styled.div`
     background-color: #F2F2F2;
     font-family: 'Lexend Deca', sans-serif;
     margin-top: 70px;
+`
+const Habito = styled.div`
+    width: 340px;
+    height: 91px;
+    background-color: #FFFFFF;
+    border-radius: 5px;
+    margin-top: 20px;
+    h1{
+        color: #666666;
+        font-size: 20px;
+        margin-top: 13px;
+        margin-left: 15px;
+    }
+    img{
+        width: 13px;
+        height: 15px;
+        margin-top: 11px;
+        margin-right: 11px;
+    }
+    div{
+        display: flex;
+        justify-content: space-between;
+    }
+`
+const DivBotao = styled.div`
+    width: 100px;
+    margin-left: 15px;
+    margin-top: 8px;
+`
+
+const Button = styled.button`
+    margin-right: 4px;
+    width: 30px;
+    height: 30px;
 `
 
 const MeusHabitos = styled.div`
@@ -60,6 +139,7 @@ const MeusHabitos = styled.div`
 `
 
 const CriarHabito = styled.div`
+    display: ${props => props.display};
     width: 340px;
     height: 180px;
     background-color: #FFFFFF;
@@ -71,7 +151,7 @@ const CriarHabito = styled.div`
         flex-direction: column;
     }
     input{
-        align-self: center;
+        margin-left: 17px;
         width: 303px;
         height: 45px;
         border-radius: 5px;
@@ -97,19 +177,12 @@ const CriarHabito = styled.div`
         }
     }
 `
-
-const BotoesSemana = styled.button`
-    margin-top: 8px;
-    width: 30px;
-    height: 30px;
-    background-color: #FFFFFF;
-    border: 1px solid #D4D4D4;
-    border-radius: 5px;
-    font-family: 'Lexend Deca', sans-serif;
-    color: #DBDBDB;
-    font-size: 20px;
+const DivDias = styled.div`
+    display: flex;
+    gap: 4px;
     margin-left: 17px;
 `
+
 const Botoes = styled.div`
     margin-top: 29px;
     display: flex;
