@@ -6,6 +6,7 @@ import axios from "axios"
 
 export default function HabitosDia({nome, d}) {
     const { token } = useContext(UserContext)
+
     const config = {
         headers: {
             "Authorization": `Bearer ${token}`

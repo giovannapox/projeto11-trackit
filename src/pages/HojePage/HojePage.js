@@ -7,11 +7,12 @@ import { useContext, useEffect, useState } from "react"
 import axios from "axios"
 import dayjs from "dayjs"
 import HabitosDia from "./HabitosDia"
+import { ProgressContext } from "../../context/Progresso"
 
 export default function HojePage() {
     const dia = ["Domingo", "Segunda", "Terça", "Quarta", "Quinta", "Sexta", "Sábado"]
     const [dados, setDados] = useState([])
-
+    const { progress } = useContext(ProgressContext)
     const { token } = useContext(UserContext)
     const config = {
         headers: {
@@ -27,16 +28,16 @@ export default function HojePage() {
         promise.catch(err => {
             console.log(err.response.data.message)
         })
-
+        
     }, [dados, setDados]);
 
     return (
         <>
             <Topo />
             <TelaHabitos>
-                <MeusHabitos>
+                <MeusHabitos progressbar={progress}>
                     <h1 data-test="today">{dia[(dayjs().day())]}, {(dayjs().format('DD/MM'))}</h1>
-                    <p data-test="today-counter">Nenhum hábito concluído ainda</p>
+                    <p data-test="today-counter">{progress !== null && progress > 0? `${progress}% dos hábitos concluídos` : "Nenhum hábito concluído ainda"}</p>
                 </MeusHabitos>
                 <TodosHabitos>
                 {dados.map((d, i) => <HabitosDia key={i} nome={d.name} d={d} />)}
@@ -67,7 +68,7 @@ const MeusHabitos = styled.div`
     }
     p{  
         margin-top: 2px;
-        color: #BABABA;
+        color: ${props=> props.progressbar > 0 ? "#8FC549" : "#bababa"};
         font-size: 18px;
         margin-left: 17px;
     }
