@@ -28,7 +28,7 @@ export default function HojePage() {
             console.log(err.response.data.message)
         })
 
-    }, []);
+    }, [dados, setDados]);
 
     return (
         <>

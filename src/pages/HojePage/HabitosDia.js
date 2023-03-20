@@ -1,7 +1,7 @@
 import styled from "styled-components"
 import check from "../../assets/check.png"
 import UserContext from "../../context/UserContext"
-import { useContext } from "react"
+import { useContext, useState } from "react"
 import axios from "axios"
 
 export default function HabitosDia({nome, d}) {
@@ -18,7 +18,7 @@ export default function HabitosDia({nome, d}) {
             promise.then(res => {
                 console.log(res.data)
             });
-            promise.catch()
+            promise.catch();
         } else {
             const promise = axios.post(`https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits/${d.id}/uncheck`, null, config)
             promise.then(res => {
