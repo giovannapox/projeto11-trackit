@@ -2,25 +2,46 @@ import styled from "styled-components"
 import Topo from "../../components/Topo"
 import Menu from "../../components/Menu"
 import check from "../../assets/check.png"
+import UserContext from "../../context/UserContext"
+import { useContext, useEffect, useState } from "react"
+import axios from "axios"
+import dayjs from "dayjs"
+import HabitosDia from "./HabitosDia"
 
 export default function HojePage() {
+    const dia = ["Domingo", "Segunda", "Terça", "Quarta", "Quinta", "Sexta", "Sábado"]
+    const [dados, setDados] = useState([])
+
+    const { token } = useContext(UserContext)
+    const config = {
+        headers: {
+            "Authorization": `Bearer ${token}`
+        }
+    }
+    useEffect(() => {
+        const promise = axios.get("https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits/today", config)
+        promise.then(res => {
+            console.log(res.data)
+            setDados(res.data)
+        })
+        promise.catch(err => {
+            console.log(err.response.data.message)
+        })
+
+    }, []);
+
     return (
         <>
             <Topo />
             <TelaHabitos>
                 <MeusHabitos>
-                    <h1>Hoje</h1>
-                    <p>Nenhum hábito concluído ainda</p>
+                    <h1 data-test="today">{dia[(dayjs().day())]}, {(dayjs().format('DD/MM'))}</h1>
+                    <p data-test="today-counter">Nenhum hábito concluído ainda</p>
                 </MeusHabitos>
                 <TodosHabitos>
-                <Habitos>
-                    <h1>Ler 1 capítulo de Livro</h1>
-                    <p>Sequência atual:</p>
-                    <p>Seu Recorde: </p>
-                    <DivCheck>
-                        <img src={check} />
-                    </DivCheck>
-                </Habitos>
+                {dados.map((d, i) => <HabitosDia key={i} nome={d.name} d={d} />)}
+
+
                 </TodosHabitos>
             </TelaHabitos>
             <Menu />
@@ -57,45 +78,4 @@ const TodosHabitos = styled.div`
     display: flex;
     flex-direction: column;
     align-items: center;
-`
-
-const Habitos = styled.div`
-    position: relative;
-    border-radius: 5px;
-    background-color: #ffffff;
-    width: 340px;
-    height: 94px;
-    h1{ 
-        margin-top: 13px;
-        margin-left: 17px;
-        margin-right: 20px;
-        color: #666666;
-        font-size: 18px;
-    }
-    p{  
-        margin-top: 7px;
-        margin-left: 15px;
-        color: #666666;
-        font-size: 13px;
-    }
-`
-
-const DivCheck = styled.div`
-    position: absolute;
-    bottom: 0;
-    top: 0;
-    right: 13px;
-    margin: auto;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 69px;
-    height: 69px;
-    background-color: #EBEBEB;
-    border: 1px solid #E7E7E7;
-    border-radius: 5px;
-    img{
-        width: 35px;
-        height: 28px;
-    }
 `

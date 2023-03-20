@@ -38,7 +38,7 @@ export default function HabitosPage() {
         promise.catch(err => {
             alert(err.response.data.message)
         })
-    }, [listaHabitos])
+    }, [])
 
     function adicionarHabito() {
         setDisplay("flex")
