@@ -2,46 +2,8 @@ import styled from "styled-components"
 import { CircularProgressbar, buildStyles } from "react-circular-progressbar"
 import { Link } from "react-router-dom"
 import 'react-circular-progressbar/dist/styles.css';
-import { useContext, useEffect } from "react";
-import { ProgressContext } from "../context/Progresso";
-import UserContext from "../context/UserContext";
-import axios from "axios";
 
-export default function Menu () {
-    const { progress, setProgress } = useContext(ProgressContext)
-    const { token } = useContext(UserContext)
-
-    useEffect(() => {
-        const config = {
-            headers: {
-                "Authorization": `Bearer ${token}`
-            }
-        }
-        const promise = axios.get("https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits/today", config)
-        
-        promise.then((res) => {
-            let fim = 0;
-            let total = 0;
-            res.data.forEach((d) => {
-                console.log(d)
-                if(d.done){
-                    fim++
-                }
-                total++
-            })
-
-            let valor = fim / total * 100
-
-            if(total === 0){
-                setProgress(0)
-            } else {
-                setProgress(valor)
-            }
-        })
-        
-        promise.catch()
-    }, [])
-    
+export default function Menu () { 
     return (
         <>
             <MenuContainer data-test="menu">
@@ -49,7 +11,7 @@ export default function Menu () {
                 <Link data-test="today-link" to="/hoje">
                     <CircularProgress>
                         <CircularProgressbar
-                            value={progress}
+                            value={66}
                             text={"Hoje"}
                             background
                             backgroundPadding={6}
